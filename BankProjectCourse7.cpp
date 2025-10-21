@@ -1598,9 +1598,9 @@ void mainOperation()
 }
 
 void login() {
-	cout << "-_-_--_-_--_-_--_-_-" << endl;
-	cout << "LOGIN SCREEN " << endl;
-	cout << "-_-_--_-_--_-_--_-_-" << endl;
+	cout << "-_-_--_-_--_-_--_-_-_--_-_-_--_-_-" << endl;
+	cout <<    "  LOGIN SCREEN   " << endl;
+	cout << "-_-_--_--_--_-_-_--_-_-_--_-_- -_-" << endl;
 
 	string username, password;
 	stUser user;
@@ -1642,7 +1642,7 @@ void UsersOperationsMenu()
 		cout << "=====================================\n";
 		cout << "Enter The Operation you want to do [1 to 6] : ";
 		cin >> choice;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // fix buffer
+		cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 		system("cls");
 
 		switch (choice)
