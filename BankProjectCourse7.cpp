@@ -1275,52 +1275,58 @@ stUser changeUserRecord(string username)
 }
 
 
-bool updateUser(string username, string password, vector <stUser>& vUsers)
+
+void updateUser(vector<stUser>& vUsers, string userFileName)
 {
+	string username;
+	cout << "\nEnter the username you want to update: ";
+	cin >> username;
 
-	stUser user; 
+	bool found = false;
 
-	if (searchUserByUserName(username, user))
+	for (stUser& user : vUsers)
 	{
-
-		if (user.password == password)
+		if (user.username == username)
 		{
+			found = true;
 
-			printUserData(user);
+			cout << "\nUser found:\n";
+			cout << "Username: " << user.username << endl;
+			cout << "Current password: " << user.password << endl;
+			cout << "Current permissions: " << user.permissions << endl;
 
-			char answer; 
+			cout << "\nEnter new password (or press Enter to keep current): ";
+			cin.ignore(); // clear leftover newline
+			string newPassword;
+			getline(cin, newPassword);
 
-			cout << "Are you sure you want to update this user Data ?" << endl; 
+			if (!newPassword.empty())
+				user.password = newPassword;
 
-			cin >> answer; 
-			cin.ignore(1, '\n');
+			cout << "Enter new permissions (or press Enter to keep current): ";
+			string newPermissions;
+			getline(cin, newPermissions);
 
-			if (answer == 'y' || answer == 'Y')
-			{
+			if (!newPermissions.empty())
+				user.permissions = newPermissions;
 
+			cout << "\nUser updated successfully.\n";
 
-				for (stUser& u : vUsers)
-				{
+			
+			saveUsersDataToFile(userFileName, vUsers);
 
-					if (u.username == username)
-					{
-						u = changeUserRecord(username);
-						break;
-					}
-				
-				}
-
-				saveUsersDataToFile(UserFileName, vUsers);
-				cout << "\n\nClient Updated Successfully.";
-				return true;
-
-			}
+			break;
 		}
 	}
-	return false; 
 
+	if (!found)
+	{
+		cout << "\nUser not found.\n";
+	}
+
+	cout << "\nPress Enter to return to the main menu...";
+	cin.get();
 }
-
 
 
 
@@ -1361,22 +1367,31 @@ void UsersOperationsMenu()
 		
 		system("pause>0");
 		system("cls");
+		UsersOperationsMenu();
 		break;
 	case 2 :
 		AddNewUser(vUsers);
 		system("pause>0");
 		system("cls");
+		UsersOperationsMenu();
 		break; 
 	case 3  :
 		deleteUser(); 
 		system("pause>0");
 		system("cls");
+		UsersOperationsMenu();
 		break;
 
+	case 4 :
+		updateUser(vUsers,UserFileName);
+		system("pause>0");
+		system("cls");
+		UsersOperationsMenu();
+		break;
 	
 
-
-
+	default :
+		UsersOperationsMenu();
 
 
 	}
