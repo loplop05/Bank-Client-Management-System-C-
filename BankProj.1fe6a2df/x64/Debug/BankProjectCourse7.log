@@ -1,0 +1,6 @@
+﻿  BankProjectCourse7.cpp
+C:\Users\User\source\repos\BankProjectCourse7\BankProjectCourse7.cpp(112,16): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+C:\Users\User\source\repos\BankProjectCourse7\BankProjectCourse7.cpp(128,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\User\source\repos\BankProjectCourse7\BankProjectCourse7.cpp(669,12): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Users\User\source\repos\BankProjectCourse7\BankProjectCourse7.cpp(724,13): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+  BankProjectCourse7.vcxproj -> C:\Users\User\source\repos\BankProjectCourse7\x64\Debug\BankProjectCourse7.exe
