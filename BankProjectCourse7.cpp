@@ -1289,6 +1289,8 @@ void mainOperation()
 
 int main()
 {
+
+	int x = 3; 
 	mainOperation();
 	system("pause>0");
 }
