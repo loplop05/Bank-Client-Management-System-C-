@@ -897,6 +897,22 @@ void TranSactionsMenuOperation(vector<sClient>& vClients)
 
 }
 
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// 
+// 
+//				USER SECTION      USER SECTION       USER SECTION 
+
+// ==================================================================================
 
 
 
@@ -934,7 +950,16 @@ void PrintAllUsersData(vector <stUser> vUser) {
 	cout << "\n_________________________________________________________________________________\n";
 }
 
+void printUserData(stUser u)
+{
+	cout << "User Name: " << u.username << endl;
+	cout << "Pass word   : " << u.password << endl;
+	cout << "Premissions : " << u.permissions << endl;
+	
+}
 
+// ==================================================================================
+// ==================================================================================
 
 stUser ConvertLineToRecordUsersVersion(string line, string sep = "#//#")
 {
@@ -968,7 +993,7 @@ string ConvertRecordToLineUserVersion(stUser user, string seprator = "#//#")
 	return recordLine;
 }
 
-/// USERS DATA AINT SAVING 
+
 vector <stUser> saveUsersDataToFile(string userFileName, vector<stUser> &vUsers)
 {
 
@@ -1038,16 +1063,22 @@ vector<stUser> loadUsersDataFromFile(string usersFileName)
 	return vUserFileContent;
 }
 
+// ==================================================================================
+// ==================================================================================
 
-bool userExistWithUserName(string  &user, string userFileName)
+bool searchUserByUserName(string username, stUser &user)
 {
-	vector <stUser> vUsers = loadUsersDataFromFile(userFileName);
+	vector <stUser> vUsers = loadUsersDataFromFile(UserFileName);
 
 	for (stUser &u : vUsers)
 	{
 
-		if (u.username == user)
-			return true; 
+		if (u.username == username)
+		{
+			user = u;
+			return true;
+		}
+			
 
 
 	}
@@ -1058,8 +1089,10 @@ bool userExistWithUserName(string  &user, string userFileName)
 
 }
 
-//bool findUserByUserNameAndPassword();
 
+
+// ==================================================================================
+// ==================================================================================
 
 
 stUser readNewUser()
@@ -1071,7 +1104,7 @@ stUser readNewUser()
 
 
 
-	while (userExistWithUserName(user.username, UserFileName))
+	while (searchUserByUserName(user.username, user))
 	{
 
 		cout << "User With Name [" << user.username << "] is Already Exists !" << endl;
@@ -1083,7 +1116,9 @@ stUser readNewUser()
 
 	getline(cin >> ws, user.password);
 
+	cout << "Enter Premmisions :"<<endl;
 
+	getline(cin >> ws, user.permissions);
 	 
 
 	return user;
@@ -1097,11 +1132,199 @@ void AddNewUser(vector <stUser>& vUsers)
 
 	stUser newUser = readNewUser();
 	vUsers.push_back(newUser);
+	cout << "\n_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+	cout << "       User Added Succefully !  " << endl;
+	cout << "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
 
 
 	saveUsersDataToFile(UserFileName, vUsers);
 
 }
+// ==================================================================================
+// ==================================================================================
+
+
+bool markUpforDeleteByUserNameAndPassWord(string username, string passWord , vector<stUser>& vUsers)
+{
+
+
+
+	for (stUser& user : vUsers)
+	{
+
+		if (user.username == username && user.password == passWord)
+		{
+
+			user.markForDelete = true; 
+
+			return true;
+
+		}
+
+
+
+	}
+
+
+	return false;
+
+}
+
+
+bool deleteUserByUserName(string username ,  vector <stUser>& vUsers)
+{
+
+	stUser user; 
+
+
+	char answer = 'n'; 
+
+	string pass; 
+
+	if (searchUserByUserName(username, user))
+	{
+
+		printUserData(user);
+		cout << endl;
+		
+		cout << "Do you want to delete This User ? " << endl; 
+		cin >> answer;
+		
+		 
+		if (answer == 'y' || answer == 'Y')
+
+		{
+			cout << "Enter the passWord Again?" << endl;
+			cin >> pass;
+			if (markUpforDeleteByUserNameAndPassWord(username, pass, vUsers))
+			{
+
+				cout << "\n_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+				cout << "       User Deleted Succefully !  " << endl;
+				cout << "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+
+				saveUsersDataToFile(UserFileName, vUsers);
+				return true;
+
+
+
+
+			}
+			else {
+
+
+				cout << "No Account with this number ! " << endl;
+				return false;
+			}
+		}
+
+	}
+
+
+
+
+	return false; 
+
+
+
+
+}
+
+void deleteUser()
+{
+	vector<stUser> vUsers = loadUsersDataFromFile(UserFileName);
+	string userName;
+	cout << "Enter the user you want to delete ? " << endl;
+	cin >> userName;
+
+	
+	if (deleteUserByUserName(userName, vUsers)) {
+		// saveUsersDataToFile is already called inside deleteUserByUserName on success,
+		// but if you prefer centralizing saving, you can call it here:
+		// saveUsersDataToFile(UserFileName, vUsers);
+
+		cout << "\n_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+		cout << "       User Deleted Succefully !  " << endl;
+		cout << "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+	}
+	else {
+		cout << "Delete operation failed or user not found." << endl;
+	}
+}
+
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+stUser changeUserRecord(string username)
+{
+
+	stUser u;
+	u.username = username;
+
+	cout << "Enter PassWord ?" << endl;
+	getline(cin >> ws, u.password); 
+
+
+	cout << "Enter Premissions ?" << endl;
+	getline(cin >> ws, u.password); 
+
+
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+	return u;
+}
+
+
+bool updateUser(string username, string password, vector <stUser>& vUsers)
+{
+
+	stUser user; 
+
+	if (searchUserByUserName(username, user))
+	{
+
+		if (user.password == password)
+		{
+
+			printUserData(user);
+
+			char answer; 
+
+			cout << "Are you sure you want to update this user Data ?" << endl; 
+
+			cin >> answer; 
+			cin.ignore(1, '\n');
+
+			if (answer == 'y' || answer == 'Y')
+			{
+
+
+				for (stUser& u : vUsers)
+				{
+
+					if (u.username == username)
+					{
+						u = changeUserRecord(username);
+						break;
+					}
+				
+				}
+
+				saveUsersDataToFile(UserFileName, vUsers);
+				cout << "\n\nClient Updated Successfully.";
+				return true;
+
+			}
+		}
+	}
+	return false; 
+
+}
+
+
+
+
+
 
 
 void UsersOperationsMenu()
@@ -1137,16 +1360,20 @@ void UsersOperationsMenu()
 		PrintAllUsersData(vUsers);
 		
 		system("pause>0");
-		
+		system("cls");
 		break;
 	case 2 :
 		AddNewUser(vUsers);
-
+		system("pause>0");
 		system("cls");
 		break; 
+	case 3  :
+		deleteUser(); 
+		system("pause>0");
+		system("cls");
+		break;
 
-
-
+	
 
 
 
@@ -1290,7 +1517,7 @@ void mainOperation()
 int main()
 {
 
-	int x = 3; 
+
 	mainOperation();
 	system("pause>0");
 }
